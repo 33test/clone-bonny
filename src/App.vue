@@ -5,6 +5,7 @@ import Footer from './components/Footer.vue';
 import Carousel2 from './components/Carousel2.vue';
 import StoreInfo4 from './components/StoreInfo4.vue';
 import ProductList from './views/ProductList.vue';
+import Reviews from './components/Reviews.vue';
 
 </script>
 
@@ -12,6 +13,8 @@ import ProductList from './views/ProductList.vue';
   <header>
     <nav>
       <RouterLink to="/">Home</RouterLink>
+      |
+      <RouterLink to="/reviews">Reviews</RouterLink>
       | <!-- COMPANY -->
       <RouterLink to="/about">關於品牌</RouterLink>
       | 
