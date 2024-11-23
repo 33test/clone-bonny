@@ -1,97 +1,129 @@
-<script setup >
+<script setup>
 import ProductItem from "@/components/ProductItem.vue";
-import { ref } from "vue"
+import { ref } from "vue";
 import { storeToRefs } from "pinia";
-import { useProductStore } from '@/stores/products'
+import { useProductStore } from "@/stores/products";
 
-const ProductStore = useProductStore()
-const { productList } = storeToRefs(ProductStore)
-
+const ProductStore = useProductStore();
+const { productList } = storeToRefs(ProductStore);
 
 // select package => Element plus
-const sortValue = ref('')
-
+const sortValue = ref("");
 
 const sortOptions = [
   {
-    label: '上架時間：由新到舊',
-    value: 'latest',
+    label: "上架時間：由新到舊",
+    value: "latest",
   },
   {
-    label: '上架時間：由舊到新',
-    value: 'oldest',
+    label: "上架時間：由舊到新",
+    value: "oldest",
   },
   {
-    label: '價格：由高至低',
-    value: 'expensive',
+    label: "價格：由高至低",
+    value: "expensive",
   },
   {
-    label: '價格：由低至高',
-    value: 'cheap',
+    label: "價格：由低至高",
+    value: "cheap",
   },
   {
-    label: '銷量：由高至低',
-    value: 'popular',
+    label: "銷量：由高至低",
+    value: "popular",
   },
-]
+];
 
 const pageOptions = [
   {
-    label: '每頁顯示 24 個',
-    value: 'pageItem24',
+    label: "每頁顯示 24 個",
+    value: "pageItem24",
   },
   {
-    label: '每頁顯示 48 個',
-    value: 'pageItem48',
+    label: "每頁顯示 48 個",
+    value: "pageItem48",
   },
   {
-    label: '每頁顯示 72 個',
-    value: 'pageItem72',
+    label: "每頁顯示 72 個",
+    value: "pageItem72",
   },
-]
+];
 
 // 分頁 package
-const pageValue = ref('')
+const pageValue = ref("");
 const onClickHandler = (page) => {
   console.log(page);
 };
 const currentPage = ref(1);
-
 </script>
 
-
 <template>
-  <section class=" px-4 py-3">
+  123
+  <section class="px-4 py-3">
     <div class="headerContainer px-1 mb-2 md:flex items-center">
-      <h1 class=" py-5 text-xl">戒指 / Rings</h1>
+      <h1 class="py-5 text-xl">戒指 / Rings</h1>
       <div class="selectContainer flex">
-        <div class="pageSelectItem  flex items-center relative mr-3 flex-1">
-          <i class="fa-solid fa-arrow-up-short-wide absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500"></i>
-          <el-select placement="bottom" :fallback-placements="['bottom-start']" v-model="sortValue" placeholder="商品排序" size="large" class="pl-10">
-            <el-option v-for="item in sortOptions" :key="item.value" :label="item.label" :value="item.value"/>
+        <div class="pageSelectItem flex items-center relative mr-3 flex-1">
+          <i
+            class="fa-solid fa-arrow-up-short-wide absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500"
+          ></i>
+          <el-select
+            placement="bottom"
+            :fallback-placements="['bottom-start']"
+            v-model="sortValue"
+            placeholder="商品排序"
+            size="large"
+            class="pl-10"
+          >
+            <el-option v-for="item in sortOptions" :key="item.value" :label="item.label" :value="item.value" />
           </el-select>
         </div>
-        <div class="pageSelectItem  flex items-center relative flex-1">
+        <div class="pageSelectItem flex items-center relative flex-1">
           <i class="fa-solid fa-bars fa-rotate-90 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500"></i>
-          <el-select placement="bottom"  :fallback-placements="['bottom-start']" v-model="pageValue" placeholder="每頁顯示 24 個" size="large" class="pl-10">
-            <el-option class="selectOption" v-for="item in pageOptions" :key="item.value" :label="item.label" :value="item.value" />
+          <el-select
+            placement="bottom"
+            :fallback-placements="['bottom-start']"
+            v-model="pageValue"
+            placeholder="每頁顯示 24 個"
+            size="large"
+            class="pl-10"
+          >
+            <el-option
+              class="selectOption"
+              v-for="item in pageOptions"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            />
           </el-select>
         </div>
       </div>
-
     </div>
 
     <!-- 產品列表 -->
     <div class="flex flex-wrap">
-      <ProductItem v-for="(item, index) in productList" :key="item.id" :title="item.title" :price="item.price"
-        :orginalPrice="item.orginalPrice" :frontImg="item.frontImg" :backImg="item.backImg" />
+      <ProductItem
+        v-for="(item, index) in productList"
+        :key="item.id"
+        :title="item.title"
+        :price="item.price"
+        :orginalPrice="item.orginalPrice"
+        :frontImg="item.frontImg"
+        :backImg="item.backImg"
+      />
     </div>
 
     <!-- 分頁 -->
-    <div class="flex justify-center md:relative  md:mb-12">
-      <vue-awesome-paginate class=" md:absolute md:right-0 text-gray-500 text-sm" :total-items="productList.length"
-        :items-per-page="2" :max-pages-shown="5" v-model="currentPage" @click="onClickHandler"
-        :hide-prev-next-when-ends="true" link-url="/products?page=[page]" />
+    <div class="flex justify-center md:relative md:mb-12">
+      <vue-awesome-paginate
+        class="md:absolute md:right-0 text-gray-500 text-sm"
+        :total-items="productList.length"
+        :items-per-page="2"
+        :max-pages-shown="5"
+        v-model="currentPage"
+        @click="onClickHandler"
+        :hide-prev-next-when-ends="true"
+        link-url="/products?page=[page]"
+      />
     </div>
   </section>
 </template>
@@ -130,11 +162,9 @@ const currentPage = ref(1);
   } */
 </style>
 
-
 <!-- select 的 style -->
 <style scoped>
-
-.headerContainer{
+.headerContainer {
   justify-content: space-between;
 }
 
@@ -142,11 +172,9 @@ const currentPage = ref(1);
   border-bottom: 1px solid black;
 }
 
-
-:deep(.el-select__placeholder span){
+:deep(.el-select__placeholder span) {
   color: #000;
 }
-
 
 /* 去除邊框 */
 :deep(.el-select__wrapper),
@@ -159,13 +187,12 @@ const currentPage = ref(1);
 }
 
 /* 去除 focused 時的邊框 */
-:deep(.el-select__wrapper.is-focused){
+:deep(.el-select__wrapper.is-focused) {
   box-shadow: 0 0 0 0px #fff inset;
 }
 
-:deep(.el-select__wrapper.is-hovering:not(.is-focused)){
+:deep(.el-select__wrapper.is-hovering:not(.is-focused)) {
   box-shadow: 0 0 0 0px #fff inset;
-
 }
 
 /* option 的 hover 樣式 */
@@ -175,12 +202,10 @@ const currentPage = ref(1);
   font-weight: 400;
 }
 
-
-.el-select-dropdown__item.is-hovering{
+.el-select-dropdown__item.is-hovering {
   background-color: #000;
   color: #fff;
 }
-
 
 @media screen and (768px <= width) {
   .pageSelectItem {
@@ -190,6 +215,6 @@ const currentPage = ref(1);
 
   .el-select--large .el-select__wrapper {
     padding: 4px;
-}
+  }
 }
 </style>
