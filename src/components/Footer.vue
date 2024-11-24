@@ -2,7 +2,7 @@
   <hr />
   <!-- Footer -->
   <footer class="footer mt-8">
-    <div class="container mx-auto grid grid-cols-1 md:grid-cols-4 gap-8 mb-20 lg:m-8">
+    <div class="container mx-auto grid grid-cols-1 md:grid-cols-4 p-5 gap-8 mb-20 lg:m-8">
       <!-- COMPANY -->
       <div class="flex flex-col ">
         <h3 class="font-extrabold text-[18px] mb-4">COMPANY</h3>
@@ -70,7 +70,8 @@
 
 <style scoped>
 .container{
-  padding: 20px;
+ margin: 0 auto;
+padding-bottom: 10px;
 }
 .footer {
   width: 100%;

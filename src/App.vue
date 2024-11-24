@@ -13,7 +13,10 @@ import ProductList from "./views/ProductList.vue";
     <NavBar />
     <nav>
       <RouterLink to="/about">About</RouterLink>
+      |
       <RouterLink to="/">Home</RouterLink>
+      |
+      <RouterLink to="/reviews">Reviews</RouterLink>
       |
       <!-- COMPANY -->
       <RouterLink to="/about">關於品牌</RouterLink>
@@ -33,6 +36,8 @@ import ProductList from "./views/ProductList.vue";
       <RouterLink to="/after-sales">售後服務</RouterLink>
       |
       <RouterLink to="/overseas-delivery">海外運送</RouterLink>
+      |
+      <RouterLink to="/faq">Faq</RouterLink>
       |
       <RouterLink to="/products">products</RouterLink>
       |

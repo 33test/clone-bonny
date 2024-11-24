@@ -2,157 +2,58 @@
   box-sizing: border-box;
 }
 
-/* 12 份中佔 1 份 */
+/* 6 份中佔 1 份 */
 .col-1 {
-  width: calc(100% / 12);
-}
-
-.col-2 {
   width: calc(100% / 6);
 }
 
-.col-3 {
-  width: calc(100% / 4);
-}
-
-.col-4 {
+.col-2 {
   width: calc(100% / 3);
 }
 
-.col-5 {
-  width: calc(100% / (5 / 12));
-}
-
-.col-6 {
+.col-3 {
   width: calc(100% / 2);
 }
 
-.col-7 {
-  width: calc(100% / (7 / 12));
+.col-4 {
+  width: calc(100% / (4 / 6));
 }
 
-.col-8 {
-  width: calc(100% / (8 / 12));
+.col-5 {
+  width: calc(100% / (5 / 6));
 }
 
-.col-9 {
-  width: calc(100% / (9 / 12));
+.col-6 {
+  width: calc(100% / 6);
 }
-
-.col-10 {
-  width: calc(100% / (10 / 12));
-}
-
-.col-11 {
-  width: calc(100% / (11 / 12));
-}
-
-.col-12 {
-  width: calc(100% / 1);
-}
-
 
 
 
 @media (min-width: 768px) {
 
   .md\:col-1 {
-    width: calc(100% / 12);
-  }
-  
-  .md\:col-2 {
     width: calc(100% / 6);
   }
   
-  .md\:col-3 {
-    width: calc(100% / 4);
-  }
-  
-  .md\:col-4 {
+  .md\:col-2 {
     width: calc(100% / 3);
   }
   
-  .md\:col-5 {
-    width: calc(100% / (5 / 12));
-  }
-  
-  .md\:col-6 {
+  .md\:col-3 {
     width: calc(100% / 2);
   }
   
-  .md\:col-7 {
-    width: calc(100% / (7 / 12));
+  .md\:col-4 {
+    width: calc(100% / (4 / 6));
   }
   
-  .md\:col-8 {
-    width: calc(100% / (8 / 12));
+  .md\:col-5 {
+    width: calc(100% / (5 / 6));
   }
-
-  .md\:col-9 {
-    width: calc(100% / (9 / 12));
-  }
-
-  .md\:col-10 {
-    width: calc(100% / (10 / 12));
-  }
-
-  .md\:col-11 {
-    width: calc(100% / (11 / 12));
-  }
-
-  .md\:col-12 {
-    width: calc(100% / (12 / 12));
-  }
-}
-
-  @media (min-width: 992px) {
-
-    .lg\:col-1 {
-      width: calc(100% / 12);
-    }
-    
-    .lg\:col-2 {
-      width: calc(100% / 6);
-    }
-    
-    .lg\:col-3 {
-      width: calc(100% / 4);
-    }
-    
-    .lg\:col-4 {
-      width: calc(100% / (4 / 12));
-    }
-    
-    .lg\:col-5 {
-      width: calc(100% / (5 / 12));
-    }
-    
-    .lg\:col-6 {
-      width: calc(100% / 2);
-    }
-    
-    .lg\:col-7 {
-      width: calc(100% / (7 / 12));
-    }
-    
-    .lg\:col-8 {
-      width: calc(100% / (8 / 12));
-    }
   
-    .lg\:col-9 {
-      width: calc(100% / (9 / 12));
-    }
+  .md\:col-6 {
+    width: calc(100% / 6);
+  }
   
-    .lg\:col-10 {
-      width: calc(100% / (10 / 12));
-    }
-  
-    .lg\:col-11 {
-      width: calc(100% / (11 / 12));
-    }
-  
-    .lg\:col-12 {
-      width: calc(100% / (12 / 12));
-    }
 
 }
