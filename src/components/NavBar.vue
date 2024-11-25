@@ -56,7 +56,7 @@
           <font-awesome-icon :icon="['fas', 'magnifying-glass']" />
         </li>
         <li><font-awesome-icon :icon="['fas', 'comment']" class="msg" /></li>
-        <li><font-awesome-icon :icon="['fas', 'user']" /></li>
+        <li><router-link to="/users/edit"><font-awesome-icon :icon="['fas', 'user']" /></router-link></li>
         <li><label for="cartSidebarSwitch"><font-awesome-icon :icon="['fas', 'bag-shopping']" /></label></li>
 
         <!-- 三條橫線 (Hamburger menu) -->
