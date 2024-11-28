@@ -6,6 +6,7 @@ import Carousel2 from "./components/Carousel2.vue";
 import StoreInfo4 from "./components/StoreInfo4.vue";
 import Footer from "./components/Footer.vue";
 import ProductList from "./views/ProductList.vue";
+import ToTopButton from "./components/ToTopButton.vue";
 </script>
 
 <template>
@@ -17,7 +18,8 @@ import ProductList from "./views/ProductList.vue";
       |
       <RouterLink to="/reviews">Reviews</RouterLink>
 
-      | <!-- COMPANY -->
+      |
+      <!-- COMPANY -->
       <RouterLink to="/about">關於品牌</RouterLink>
       |
       <RouterLink to="/store-info">門市資訊</RouterLink>
@@ -39,11 +41,14 @@ import ProductList from "./views/ProductList.vue";
       <RouterLink to="/products">products</RouterLink>
       |
       <RouterLink to="/store-info">store-info</RouterLink>
+      |
+      <RouterLink to="/products/detail">products-detail</RouterLink>
     </nav>
   </header>
   <RouterView />
   <!-- <Carousel2/> -->
   <!-- <StoreInfo4/> -->
+  <ToTopButton />
   <Footer />
 </template>
 
