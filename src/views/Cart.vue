@@ -1,19 +1,6 @@
 <!-- 購物車頁面 -->
 <template>
-  <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=<device-width>, initial-scale=1.0">
-    <title>購物車</title>
-    <link rel="stylesheet" href="./reset.css"/>  
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="./style.css"/>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.0/css/all.min.css" integrity="sha512-9xKTRVabjVeZmc+GUW8GgSmcREDunMM+Dt/GrzchfN8tkwHizc5RP4Ok/MXFFy5rIjJjzhndFScTceq5e6GvVQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />             
-  
 
-</head>
-<body >
   <div class="flex justify-center my-5 ">
     <div class="stepOne flex justify-center items-center text-center">1</div>
     <div class="h-0.5  mt-3 w-60 m-0 flex justify-center items-center text-center " style=" background-color:#ddd5e4;">  </div>
@@ -215,11 +202,7 @@
 
 </div>
 </div>
-</body> 
 
-
-
-</html>
     </template>
     
     <script setup>
