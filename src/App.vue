@@ -6,7 +6,6 @@ import Carousel2 from "./components/Carousel2.vue";
 import StoreInfo5 from "./components/StoreInfo5.vue";
 import Footer from "./components/Footer.vue";
 import ProductList from "./views/ProductList.vue";
-import Footer from "./components/Footer.vue";
 import GoogleLoginButton from './components/googleLogin.vue'
 </script>
 

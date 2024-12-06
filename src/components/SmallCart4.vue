@@ -24,11 +24,11 @@
   
         <div
           class="cartContent"
-          :class="{ empty: cartItems.length === 0 }"
+          :class="{ empty:cartItems && cartItems.length === 0 }"
         >
           <!-- 如果購物車為空 -->
           <p
-            v-if="cartItems.length === 0"
+            v-if="cartItems && cartItems.length === 0"
             class="emptyCart"
           >
             你的購物車是空的
@@ -53,7 +53,7 @@
             </button>
           </div>
   
-          <div class="cartFooter" v-if="cartItems.length > 0">
+          <div class="cartFooter" v-if="cartItems && cartItems.length > 0">
             <router-link to="/Cart" class="checkoutBtn">
               訂單結帳
             </router-link>

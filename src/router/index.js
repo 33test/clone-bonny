@@ -75,7 +75,7 @@ const router = createRouter({
 		{
 			path: "/store-info",
 			name: "store-info",
-			component: StoreInfo4,
+			component: StoreInfo5,
 		},
 		{
 			path: "/users/edit",
