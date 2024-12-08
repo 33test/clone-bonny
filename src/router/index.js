@@ -80,6 +80,9 @@ const router = createRouter({
 			path: "/users/edit",
 			name: "users-edit",
 			component: UsersEdit,
+			meta: {
+				requireAuth: true
+			}
 		},
 		{
 			path: "/users/sign-in",
@@ -90,31 +93,49 @@ const router = createRouter({
 			path: "/MemberCoupons",
 			name: "MemberCoupons",
 			component: () => import("../views/MemberCoupons.vue"),
+			meta: {
+				requireAuth: true
+			}
 		},
 		{
 			path: "/MemberMessage",
 			name: "MemberMessage",
 			component: () => import("../views/MemberMessage.vue"),
+			meta: {
+				requireAuth: true
+			}
 		},
 		{
 			path: "/MemberOrder",
 			name: "MemberOrder",
 			component: () => import("../views/MemberOrder.vue"),
+			meta: {
+				requireAuth: true
+			}
 		},
 		{
 			path: "/MemberPoint",
 			name: "MemberPoint",
 			component: () => import("../views/MemberPoint.vue"),
+			meta: {
+				requireAuth: true
+			}
 		},
 		{
 			path: "/MemberShoppingGold",
 			name: "MemberShoppingGold",
 			component: () => import("../views/MemberShoppingGold.vue"),
+			meta: {
+				requireAuth: true
+			}
 		},
 		{
 			path: "/MemberWishList",
 			name: "MemberWishList",
 			component: () => import("../views/MemberWishList.vue"),
+			meta: {
+				requireAuth: true
+			}
 		},
 		{
 			path: "/OrderDetails",
@@ -122,16 +143,19 @@ const router = createRouter({
 			component: () => import("../views/OrderDetails.vue"),
 		},
 		{
-      path: "/products/detail",
-      name: "products-detail(改)",
-      component: () => import("../views/ProductDetail.vue")
-    },
-    {
-    path:'/Cart',
-    name:'Cart',
-    component: Cart
-    },  
-		
+			path: "/products/detail",
+			name: "products-detail(改)",
+			component: () => import("../views/ProductDetail.vue")
+		},
+		{
+			path: '/Cart',
+			name: 'Cart',
+			component: Cart,
+			meta: {
+				requireAuth: true
+			}
+		},
+
 	],
 
 })

@@ -1,12 +1,7 @@
 <script setup>
 import { RouterLink, RouterView } from "vue-router";
 import NavBar from "./components/NavBar.vue";
-import HomeView from "./views/HomeView.vue";
-import Carousel from "./components/Carousel.vue";
-import StoreInfo4 from "./components/StoreInfo.vue";
-import ProductList from "./views/ProductList.vue";
 import Footer from "./components/Footer.vue";
-import GoogleLoginButton from './components/googleLogin.vue'
 </script>
 
 <template>
@@ -47,7 +42,6 @@ import GoogleLoginButton from './components/googleLogin.vue'
       <RouterLink to="/products/detail">products-detail</RouterLink>
     </nav>
   </header>
-  <GoogleLoginButton />
   <RouterView />
   <!-- <Carousel/> -->
   <!-- <StoreInfo4/> -->

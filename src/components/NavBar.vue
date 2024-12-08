@@ -2,6 +2,8 @@
 import SmallCart from './SmallCart.vue';
 import { ref, computed} from 'vue';
 import { useProductStore } from '@/stores/products';  // 引入 Pinia store
+import { RouterLink, RouterView } from "vue-router";
+
 
 const productStore = useProductStore(); // 使用 Pinia store
 const cartItemCount = computed(() => productStore.cartItemCount);  // 从 store 获取购物车商品总数量
@@ -12,6 +14,8 @@ const cartOpen = ref(false);
 const changeLanguageOpen = ref(false);
 const moneyOpen = ref(false);
 const overlayOpen = ref(false);
+const isLoggedIn = ref(!!localStorage.getItem('UID'))
+
 
 const inputShow = () => {
   isVisible.value = !isVisible.value;
@@ -212,9 +216,11 @@ const closeCart = () => {
       <li class="hidden mx-3 text-black cursor-pointer xl:block hover:text-gray-500">
         <font-awesome-icon :icon="['fas', 'comment']" />
       </li>
+      <Router-link :to="isLoggedIn ? '/users/edit' : '/users/sign-in'" >
       <li class="mx-3 text-black cursor-pointer hover:text-gray-500">
         <font-awesome-icon :icon="['fas', 'user']" />
       </li>
+      </Router-link>
       <li class="mx-3 text-black cursor-pointer hover:text-gray-500">
           <label for="cartSidebarSwitch" @click="handleCartIconClick"
             ><font-awesome-icon :icon="['fas', 'bag-shopping']"
