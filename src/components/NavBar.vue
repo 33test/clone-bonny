@@ -13,6 +13,28 @@ const changeLanguageOpen = ref(false);
 const moneyOpen = ref(false);
 const overlayOpen = ref(false);
 
+
+const searchQuery = ref('');
+const data = ref([]);
+const fetchProducts = async () => {
+  try {
+    const response = await axios.get('http://localhost:3300/bonny/products');
+    console.log(response.data);  // 確認是否成功取得資料
+    // 假設這裡回傳的資料是 products，將資料保存到 state 中
+    products.value = response.data.products || [];
+  } catch (error) {
+    console.error('API 請求錯誤:', error);
+  }
+};
+const search = () => {
+  if (searchQuery.value.trim() !== '') {
+    router.push(`/search?q=${searchQuery.value}`);
+  } else {
+    alert('請輸入搜尋內容');
+  }
+};
+
+
 const inputShow = () => {
   isVisible.value = !isVisible.value;
 };
@@ -200,12 +222,14 @@ const closeCart = () => {
       </li>
       <li class="relative hidden mx-3 text-black xl:block group hover:text-gray-500">
         <input
+          v-model="searchQuery"
+          @input="fetchSearchResults"
           type="search"
           maxlength="100"
           placeholder="ivy郁欣聯名"
           class="w-0 overflow-hidden transition-all duration-500 ease-in-out border-b border-black outline-none group-hover:w-56 focus:w-56 focus-visible:outline-none"
         />
-        <button type="submit">
+        <button type="submit" @click="search">
           <font-awesome-icon :icon="['fas', 'magnifying-glass']" />
         </button>
       </li>
@@ -238,6 +262,8 @@ const closeCart = () => {
       <i class="fa fa-search ::before"></i>
     </button>
     <input
+      v-model="searchQuery"
+      @input="fetchSearchResults"
       type="search"
       maxlength="100"
       placeholder="ivy郁欣聯名"
