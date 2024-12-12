@@ -9,6 +9,8 @@ import { library } from '@fortawesome/fontawesome-svg-core';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { fas } from '@fortawesome/free-solid-svg-icons';
 import { fab } from '@fortawesome/free-brands-svg-icons';
+import Cart from './views/Cart.vue'
+import { createRouter, createWebHistory } from 'vue-router';
 // import the package
 
 import 'element-plus/dist/index.css'
@@ -16,6 +18,15 @@ import VueAwesomePaginate from "vue-awesome-paginate";
 
 // import the necessary css file
 import "vue-awesome-paginate/dist/style.css";
+// const routes = [
+//   // { path: '/', component: HomePage },
+//   { path: '/Cart', component: Cart, meta: { requireAuth: true } },
+//   // Add more routes as needed
+// ];
+// const router = createRouter({
+//   history: createWebHistory(),
+//   routes,
+// });
 
 router.beforeEach((to, from, next) => {
   const isAuthenticated = !!localStorage.getItem('UID')
@@ -48,3 +59,4 @@ app.use(VueAwesomePaginate)
 app.use(ElementPlus)
 
 app.mount('#app')
+// createApp(Cart).mount('#app')

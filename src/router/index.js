@@ -155,6 +155,16 @@ const router = createRouter({
 				requireAuth: true
 			}
 		},
+		{
+			path: '/Debit',
+			name: 'Debit',
+			component: () => import("../views/Debit.vue"),
+			props: route => ({ 
+				location: route.query.location,
+				shipping: route.query.shipping,
+				payment: route.query.payment
+			})
+		}
 
 	],
 

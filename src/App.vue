@@ -2,6 +2,7 @@
 import { RouterLink, RouterView } from "vue-router";
 import NavBar from "./components/NavBar.vue";
 import Footer from "./components/Footer.vue";
+import Cart from "./views/Cart.vue";
 </script>
 
 <template>
@@ -47,4 +48,6 @@ import Footer from "./components/Footer.vue";
   <Footer />
 </template>
 
-<style scoped></style>
+<style scoped>
+
+</style>

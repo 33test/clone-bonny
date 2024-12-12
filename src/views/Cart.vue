@@ -2,19 +2,19 @@
 <template>
 
   <div class="flex justify-center my-5 ">
-    <div class="stepOne flex justify-center items-center text-center">1</div>
+    <div class="flex items-center justify-center text-center stepOne">1</div>
     <div class="h-0.5  mt-3 w-60 m-0 flex justify-center items-center text-center " style=" background-color:#ddd5e4;">  </div>
-    <div  class="stepTwo flex justify-center items-center text-center">2</div>
+    <div  class="flex items-center justify-center text-center stepTwo">2</div>
    </div>
 
-  <div class="prNav flex justify-center gap-40 my-2">
+  <div class="flex justify-center gap-40 my-2 prNav">
     <span>購物車</span>
     <span>填寫資料</span>
   </div>
  
-  <div class="cart mt-100 ml-10 mr-10 ">
-    <div class="flex  quarter justify-start " style="position: relative;">  
-      <h3 class=" cartitems h-10 quarter mr-2" >購物車(1件)</h3>
+  <div class="ml-10 mr-10 cart mt-100 ">
+    <div class="flex justify-start quarter " style="position: relative;">  
+      <h3 class="h-10 mr-2 cartitems quarter" >購物車(1件)</h3>
       <i class="fa-solid fa-share-nodes link" ></i>
       </div>
 
@@ -29,8 +29,8 @@
   </thead>
 
 <tbody>
-  <div class="prInfo flex justify-between	 ">
-    <div class="prdetail  introduce flex justify-between	 ">
+  <div class="flex justify-between prInfo ">
+    <div class="flex justify-between prdetail introduce ">
       <img src="https://fakeimg.pl/50x50/200">
       <div class="">
         [預購] [鋼飾] 叛逆小熊手鍊 / Trendy Bear Bracelet
@@ -40,11 +40,11 @@
     <div class="prdetail">NT$250</div>
     <div class="prdetail"></div>
     <div class="prdetail">NT$250</div>
-    <i class="fa-solid fa-xmark pr-8"></i>
+    <i class="pr-8 fa-solid fa-xmark"></i>
   </div>
   </tbody>
   
-  <div  class="sideBorder p-5 ">
+  <div  class="p-5 sideBorder ">
     <h5 class="p-5">已享用之優惠</h5>
     <div class="flex justify-between"> 
       
@@ -57,7 +57,7 @@
  
 </div>
 
- <div  class="sideBorder p-5">
+ <div  class="p-5 sideBorder">
     <div class="flex justify-between"> 
       <h5 class="p-5">尚有更多精彩優惠等著你！目前未享用：
     </h5>
@@ -78,13 +78,13 @@
  
  
  
- <div class="cart mt-100 ml-10 mr-10 cards ">
+ <div class="ml-10 mr-10 cart mt-100 cards ">
   
-  <h3 class="  h-10 quarter " >超值加價購 (往左滑)</h3>
+  <h3 class="h-10 quarter" >超值加價購 (往左滑)</h3>
   
-  <div class="card flex justify-start sideBorder w-76 p-2">
+  <div class="flex justify-start p-2 card sideBorder w-76">
       <img src="https://fakeimg.pl/150x150/200">
-      <div class="addpr w-38 h-38 ml-2">
+      <div class="ml-2 addpr w-38 h-38">
       <p class="name">BONNY&READ 送禮萬用小卡  <br>/ Bonny&Read Gift Card</p>
       <p class="pr">NT$30</p>
       <button class="buttonBg">加入購物車</button>
@@ -95,14 +95,20 @@
 </div>
 
 <div class="laptop cellphone">
-<div class="cart mt-100 ml-10 mr-10 ">
+<div class="ml-10 mr-10 cart mt-100 ">
   
-  <h3 class="  h-10 quarter" >選擇送貨及付款方式</h3>
+  <h3 class="h-10 quarter" >選擇送貨及付款方式</h3>
   
-   <div class="option m-4"> 
-    <label for="" >送貨地點 </label>
+   <div class="m-4 option"> 
+    <!-- 送貨地點 -->
+    <label for="delivery-location">送貨地點</label>
     <br>
-    <select name="" id="" class="sideBorder options message">                            
+    <select
+      id="delivery-location"
+      class="sideBorder options message"
+      v-model="selectedLocation"
+      @change="onLocationChange"
+    >                            
       <option value="AU">澳大利亞</option>
       <option value="BE">比利時</option>
       <option value="CA">加拿大</option>
@@ -117,12 +123,12 @@
       <option value="MO">澳門</option>
       <option value="MY">馬來西亞</option>
       <option value="NL">荷蘭</option>
-      <option value="NZ" selected>新西蘭</option>
+      <option value="NZ">新西蘭</option>
       <option value="PW">帕勞</option>
       <option value="PE">秘魯</option>
       <option value="PH">菲律賓</option>
       <option value="SG">新加坡</option>
-      <option value="TW">台灣</option>
+      <option value="TW" selected>台灣</option>
       <option value="TH">泰國</option>
       <option value="GB">英國</option>
       <option value="US">美國</option>
@@ -130,24 +136,41 @@
 
  </select>
   </div>
-  <div class="option m-4"> 
+  <!-- 送貨方式 -->
+  <div class="m-4 option"> 
     <label for="">送貨方式</label>
     <br>
-    <select name="" id=""class="sideBorder options message"  >                                              
-      <option value="" selected>海外運送 ( 3-7天到貨，採EMS寄送 )</option>
-      <option value="7-11" >海外運送  (3-7天到貨，DHL運送)</option>
+    <select
+      id="shipping-method"
+      class="sideBorder options message"
+      v-model="selectedShippingMethod"
+    >                                             
+    <option
+        v-for="(method, index) in shippingMethods"
+        :key="index"
+        :value="method"
+      >
+        {{ method }}
+      </option>
     </select>
     </div>
 
-    <div class="option m-4" > 
-    <label for="">付款方式</label>
+    <div class="m-4 option" > 
+    <label for="payment-method">付款方式</label>
     <br>
-    <select name="" id="" class="sideBorder options message" >                                             
-        <option value="" selected>
-          信用卡 ( Visa / MasterCard / JCB / 銀聯卡 )
+    <select
+        id="payment-method"
+        class="sideBorder options message"
+        v-model="selectedPaymentMethod"
+      >
+        <option
+          v-for="(method, index) in paymentMethods"
+          :key="index"
+          :value="method"
+        >
+          {{ method }}
         </option>
-      <option value=""  disabled>  ↳ 刷星展卡滿 3,000 送 100 刷卡金</option>
-    </select>
+      </select>
     </div>
 
     <br>
@@ -161,8 +184,8 @@
   </div>
 </div>
 
-<div class="cart mt-100 ml-10 mr-10 w-105 ">
-  <h3 class="  h-10 quarter " >訂單資訊</h3>
+<div class="ml-10 mr-10 cart mt-100 w-105 ">
+  <h3 class="h-10 quarter" >訂單資訊</h3>
   <div>
       <div class="flex justify-between p-2 ">
       <div>小計:</div>
@@ -174,7 +197,7 @@
       <div>-NT$106</div>
     </div>
 
-    <div class="flex justify-between pb-5 p-2" style="color:#A58647 ;">
+    <div class="flex justify-between p-2 pb-5" style="color:#A58647 ;">
       <div >運費:</div>
       <div>NT$1,000</div>
     </div>
@@ -183,13 +206,25 @@
     </div>
 
 <hr>
-  <div class="flex justify-between font-bold p-2">
+  <div class="flex justify-between p-2 font-bold">
     <div>合計:</div>
     <div>NT$1,637</div>
   </div>
-    <a href="" class="buttonBg flex justify-center">前往結帳</a>
+  <RouterLink
+  :to="{
+    path: '/views/Debit',
+    query: {
+      location: selectedLocation,
+      shipping: selectedShippingMethod,
+      payment: selectedPaymentMethod,
+    },
+  }"
+  class="flex justify-center buttonBg"
+>
+  前往結帳
+</RouterLink>
 
-  <div class="flex justify-between p-2	">
+  <div class="flex justify-between p-2 ">
     <div>訂單獲得點數:</div>
       <div class="" style="position: relative; transform: translateX(-180px);">
       
@@ -205,8 +240,94 @@
 
     </template>
     
-    <script setup>
-    </script>
+    
+<script setup>
+import { ref, computed, watch} from 'vue';
+import { useRoute, onBeforeRouteUpdate, useRouter} from 'vue-router';
+
+
+
+const route = useRoute();
+const router = useRouter();
+const location = (route.query.location || 'TW'); // 初始化时同步
+// 管理送貨地點與送貨方式的對應關係
+const deliveryOptions = {
+  AU: ['海外運送(3-7天到貨，EMS寄送)'],
+  BE: ['海外運送(3-7天到貨，EMS寄送)'],
+  CA: ['海外運送(3-7天到貨，EMS寄送)'],
+  CN: ['亞洲區-海外運送 (3-7天到貨，順豐)', '亞洲區-海外運送 (21-35天到貨，普通國際郵寄)'],
+  FR: ['海外運送(3-7天到貨，EMS寄送)'],
+  DE: ['海外運送(3-7天到貨，EMS寄送)'],
+  HK: ['亞洲區-海外運送 (3-7天到貨，順豐)', '亞洲區-海外運送 (21-35天到貨，普通國際郵寄)'],
+  ID: ['亞洲區-海外運送 (3-7天到貨，順豐)', '亞洲區-海外運送 (21-35天到貨，普通國際郵寄)'],
+  IT: ['海外運送(3-7天到貨，EMS寄送)'],
+  JP: ['亞洲區-海外運送 (3-7天到貨，順豐)', '亞洲區-海外運送 (21-35天到貨，普通國際郵寄)'],
+  KR: ['亞洲區-海外運送 (3-7天到貨，順豐)', '亞洲區-海外運送 (21-35天到貨，普通國際郵寄)'],
+  MO: ['亞洲區-海外運送 (3-7天到貨，順豐)', '亞洲區-海外運送 (21-35天到貨，普通國際郵寄)'],
+  MY: ['亞洲區-海外運送 (3-7天到貨，順豐)', '亞洲區-海外運送 (21-35天到貨，普通國際郵寄)'],
+  NL: ['海外運送(3-7天到貨，EMS寄送)'],
+  NZ: ['海外運送(3-7天到貨，EMS寄送)'],
+  PW: ['海外運送(3-7天到貨，EMS寄送)'],
+  PE: ['海外運送(3-7天到貨，EMS寄送)'],
+  PH: ['海外運送(3-7天到貨，EMS寄送)'],
+  SG: ['亞洲區-海外運送 (3-7天到貨，順豐)', '亞洲區-海外運送 (21-35天到貨，普通國際郵寄)'],
+  TW: ['貨到付款-黑貓宅配/滿499免運','貨到付款-郵局宅配','全台門市取貨付款','黑貓宅配','郵局宅配'],
+  TH: ['亞洲區-海外運送 (3-7天到貨，順豐)', '亞洲區-海外運送 (21-35天到貨，普通國際郵寄)'],
+  GB: ['海外運送(3-7天到貨，EMS寄送)'],
+  US: ['海外運送(3-7天到貨，EMS寄送)'],
+  VN: ['亞洲區-海外運送 (3-7天到貨，順豐)', '亞洲區-海外運送 (21-35天到貨，普通國際郵寄)'],
+  default: ['貨到付款-黑貓宅配/滿499免運','貨到付款-郵局宅配','全台門市取貨付款','黑貓宅配','郵局宅配'],
+};
+// 管理送貨地點與付款方式的對應關係
+const paymentOptions = {
+  TW: ['信用卡 (Visa / MasterCard / JCB / 銀聯卡)', '現金付款'],
+  default: ['信用卡 (Visa / MasterCard / JCB / 銀聯卡)'],
+};
+const paymentMethods = computed(() =>{
+const cashOnlyMethods = [
+    '貨到付款-黑貓宅配/滿499免運',
+    '貨到付款-郵局宅配',
+    '全台門市取貨付款',
+  ];
+  if (cashOnlyMethods.includes(selectedShippingMethod.value)) {
+    return ['現金付款'];
+  }
+  return selectedLocation.value === 'TW'
+    ? paymentOptions.TW
+    : paymentOptions.default;
+});
+// 用於管理選中的送貨地點和送貨方式
+const selectedLocation = ref('TW'); // 預設選擇台灣
+const selectedShippingMethod = ref('');
+const shippingMethods = computed(() => deliveryOptions[selectedLocation.value] || deliveryOptions.default);
+const selectedPaymentMethod = ref('');
+// 當送貨地點改變時，更新送貨方式與付款方式
+const onLocationChange = () => {
+  selectedShippingMethod.value = shippingMethods.value[0] || '';
+  selectedPaymentMethod.value = paymentMethods.value[0] || '';
+};
+// 監控 selectedShippingMethod 的變化動態更新 selectedPaymentMethod
+watch(selectedShippingMethod, () => {
+  selectedPaymentMethod.value = paymentMethods.value[0] || '';
+});
+
+// 初始化選項
+onLocationChange();
+
+// 路由更新時監控變化
+onBeforeRouteUpdate((to) => {
+  if (to.query && to.query.location) {
+    location.value = to.query.location;
+  }
+});
+
+// 防護 route.query 為 undefined 的情況
+if (route.query && route.query.location) {
+  location.value = route.query.location;
+}
+</script>
+
+    
     
     <style scoped>
 .cart{
@@ -458,7 +579,7 @@
 @media  screen and (min-width:768px) {
     /* 網頁板切換成橫向模式 */
         .laptop{
-        display: flex;
+        /* display: flex; */
         justify-content: center;
         
     }
