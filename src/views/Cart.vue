@@ -247,7 +247,8 @@ import { ref, computed, watch} from 'vue';
 import { useRoute, onBeforeRouteUpdate, useRouter} from 'vue-router';
 import { useCheckoutStore } from '../stores/payment';
 const checkoutStore = useCheckoutStore();
-
+// Initialize selected shipping method if needed
+checkoutStore.setSelectedShippingMethod('貨到付款-黑貓宅配/滿499免運'); // Example, adjust based on your logic
 
 const route = useRoute();
 const router = useRouter();
@@ -291,6 +292,7 @@ const cashOnlyMethods = [
     '貨到付款-郵局宅配',
     '全台門市取貨付款',
   ];
+  
   if (cashOnlyMethods.includes(selectedShippingMethod.value)) {
     return ['現金付款'];
   }
