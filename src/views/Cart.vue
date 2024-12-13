@@ -161,11 +161,11 @@
     <select
         id="payment-method"
         class="sideBorder options message"
-        v-model="selectedPaymentMethod"
+        v-model="checkoutStore.selectedPaymentMethod"
       >
         <option
-          v-for="(method, index) in paymentMethods"
-          :key="index"
+          v-for="method in checkoutStore.paymentMethods"
+          :key="method"
           :value="method"
         >
           {{ method }}
@@ -212,6 +212,7 @@
   </div>
   <RouterLink
   :to="{
+    name: 'Debit',
     path: '/views/Debit',
     query: {
       location: selectedLocation,
@@ -244,7 +245,8 @@
 <script setup>
 import { ref, computed, watch} from 'vue';
 import { useRoute, onBeforeRouteUpdate, useRouter} from 'vue-router';
-
+import { useCheckoutStore } from '../stores/payment';
+const checkoutStore = useCheckoutStore();
 
 
 const route = useRoute();
@@ -305,6 +307,7 @@ const selectedPaymentMethod = ref('');
 const onLocationChange = () => {
   selectedShippingMethod.value = shippingMethods.value[0] || '';
   selectedPaymentMethod.value = paymentMethods.value[0] || '';
+  console.log(`送貨地點變更為: ${selectedLocation.value}`);
 };
 // 監控 selectedShippingMethod 的變化動態更新 selectedPaymentMethod
 watch(selectedShippingMethod, () => {
@@ -325,6 +328,13 @@ onBeforeRouteUpdate((to) => {
 if (route.query && route.query.location) {
   location.value = route.query.location;
 }
+
+watch(selectedPaymentMethod, (newPaymentMethod) => {
+  router.replace({
+    query: { ...route.query, payment: newPaymentMethod },
+  });
+});
+
 </script>
 
     

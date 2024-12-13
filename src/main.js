@@ -49,9 +49,9 @@ router.beforeEach((to, from, next) => {
       next()
     }
 })
-
+const DEBUG_COMPONENT = false  // 設置為 true 時會掛載 Cart
 library.add(fas, fab);
-const app = createApp(App)
+const app = createApp(DEBUG_COMPONENT ? Cart : App)
 app.component('font-awesome-icon', FontAwesomeIcon);
 app.use(createPinia())
 app.use(router)

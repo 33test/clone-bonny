@@ -3,6 +3,10 @@ import { RouterLink, RouterView } from "vue-router";
 import NavBar from "./components/NavBar.vue";
 import Footer from "./components/Footer.vue";
 import Cart from "./views/Cart.vue";
+import { ref } from 'vue'
+
+// 調試開關
+const debugCart = ref(false) // 預設設為 false
 </script>
 
 <template>
@@ -43,8 +47,13 @@ import Cart from "./views/Cart.vue";
       <RouterLink to="/products/detail">products-detail</RouterLink>
     </nav>
   </header>
-  <RouterView />
   
+  
+   
+    
+    <!-- 調試 Cart 組件時顯示 -->
+    <Cart v-if="debugCart" />
+    <RouterView v-else/>
   <Footer />
 </template>
 

@@ -305,7 +305,7 @@
    <div class="m-2">
     <!-- 地址區域 -->
   <p>地址</p>
-  <div v-if="location.value === 'TW' || isAsianCountry" class="m-2">
+  <div v-if="recipientData.country === 'TW' || isAsianCountry">
     <!-- 亞洲模板 (包括台灣) -->
    <p>送貨地點:{{ recipientData.country }}</p>
     <input
@@ -339,6 +339,7 @@
   </div>
     <div v-else>
       <!-- 歐美模板 -->
+      <p>送貨地點:{{ recipientData.country }}</p>
       <input
         type="text"
         v-model="address1"
@@ -396,7 +397,7 @@
    </div>
     </div>
 <div>
-    <div v-if="showNewContent" class="ml-10 mr-10 cart mt-100 wid ">
+    <div v-if="checkoutStore.selectedPaymentMethod === '信用卡 (Visa / MasterCard / JCB / 銀聯卡)'" class="ml-10 mr-10 cart mt-100 wid ">
       <div class="flex justify-between quarter" >   
         <h3 class="h-10 quarter" >付款資料</h3>
         <p>合計: NT$1,634</p>
@@ -428,12 +429,12 @@
      </div>
      </div>
 
-    <div v-else class="ml-10 mr-10 cart mt-100 wid">
+    <div v-else-if="checkoutStore.selectedPaymentMethod === '現金付款'" class="ml-10 mr-10 cart mt-100 wid">
       <div class="flex justify-between quarter">   
         <h3 class="h-10 quarter">付款資料</h3>
         <p>合計: NT$2,558</p>
       </div>
-      <p class="m-2">已選擇的付款方式: 自提 新月廣場櫃位 取貨付款</p>
+      <p class="m-2">已選擇的付款方式: 貨到付現</p>
     </div>
   </div>
     
@@ -482,10 +483,11 @@
      </template>
      
      <script setup>
-import { ref, onMounted, computed, reactive } from 'vue';
+import { ref, onMounted, computed, reactive, watch } from 'vue';
 import axios from 'axios';
 import { useRoute } from 'vue-router';
-
+import { useCheckoutStore } from '../stores/payment';
+const checkoutStore = useCheckoutStore();
 // 使用 ref 來管理響應式數據
 const products = ref([]); // 儲存後端返回的商品資料
 const route = useRoute();
@@ -529,6 +531,8 @@ const formOptions = computed(() => {
 const customerData = reactive({
   name: "",
   phone: "",
+  city: "",
+  country: "",
   countryCode: "+886", // 預設為台灣
   email: "",
   gender: "",
@@ -543,12 +547,12 @@ const customerData = reactive({
 const recipientData = reactive({
   name: "",
   phone: "",
-  country: route.query.country || 'TW', // 默認為台灣
-  city: route.query.city || '',
+  country: location.value, // 初始化為傳入的地點
+  city:'',
 });
 
 // 是否同步顧客資料
-const sameAsCustomer = reactive(false);
+const sameAsCustomer = ref(false);
 
 // 年/月選項
 const years = Array.from({ length: 101 }, (_, i) => new Date().getFullYear() - i);
@@ -563,18 +567,62 @@ const days = (year, month) => {
 
 // 同步顧客資料到收件人資料
 const syncCustomerToRecipient = () => {
-  if (sameAsCustomer) {
+  if (sameAsCustomer.value) {
+    // 確保有預設的國碼
+    if (customerData.countryCode) {
+      recipientData.countryCode = customerData.countryCode;
+    }
     recipientData.name = customerData.name;
     recipientData.phone = customerData.phone;
-    recipientData.country = customerData.country; // Ensure the country field also syncs
-    recipientData.city = customerData.city; // Ensure the city field also syncs
+    // 注意：這裡使用 customerData 的國碼
+    // customerData.countryCode = recipientData.countryCode;
+    recipientData.country = location.value; // 使用 location 的值
+    // recipientData.city = customerData.city; // Ensure the city field also syncs
+
+    // 如果是同一个地区，直接同步地址
+    address.value = address.value; // 或者可以保留原有地址
+    city.value = city.value;
+    region.value = region.value;
+    postalCode.value = postalCode.value;
   } else {
     recipientData.name = "";
     recipientData.phone = "";
-    recipientData.country = '';
-    recipientData.city = '';
+    // recipientData.country = route.query.country;
+    // recipientData.city = '';
+    recipientData.countryCode = ""; // 保留原本的預設選項
+
+    // 重置地址相关信息
+    address.value = "";
+    city.value = "";
+    region.value = "";
+    postalCode.value = "";
   }
 };
+watch(sameAsCustomer, (newValue) => {
+  if (newValue) {
+    recipientData.name = customerData.name;
+    recipientData.phone = customerData.phone;
+    recipientData.city = customerData.city;
+    recipientData.country = location.value;
+  } else {
+    recipientData.name = '';
+    recipientData.phone = '';
+    recipientData.city = '';
+    recipientData.country = location.value;
+  }
+});
+  
+watch(location, (newLocation) => {
+  recipientData.country = newLocation;
+});
+
+watch(
+  () => route.query.payment,
+  (newPayment) => {
+    paymentMethod.value = newPayment || '';
+  }
+);
+
 const countryList = [
   { code: "+886", countryEn: "Taiwan", countryZh: "台灣" },
   { code: "852", countryEn: "Hong Kong", countryZh: "香港" },
@@ -598,7 +646,7 @@ const countryList = [
   // ...其他國家
 ];
 const isAsianCountry = computed(() => {
-  const asianCountries = ["TW", "CN", "JP", "KR", "SG", "MY", "VN", "TH","HK","MO","ID",'NP', 'KH'];
+  const asianCountries = ["TW", "CN", "JP", "KR", "SG", "MY", "VN", "TH", "HK", "MO", "ID", "NP", "KH"];
   return asianCountries.includes(recipientData.country);
 });
 
@@ -612,6 +660,14 @@ const postalCode = ref("");
 
 const showNewContent = ref(false);
 
+defineProps({
+  location: String,
+  shipping: String,
+  payment: String,
+});
+// 假設 saveAddress 和 defaultAddress 是需要的變數
+const saveAddress = ref('');
+const defaultAddress = ref('');
 </script>
 
      
