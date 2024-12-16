@@ -477,7 +477,12 @@
 </div>
 
  
-
+<!-- <div>
+    <h1>Debit Page</h1>
+    <p>Location: {{ location }}</p>
+    <p>Shipping: {{ shipping }}</p>
+    <p>Payment: {{ payment }}</p>
+  </div> -->
 
 
      </template>
@@ -485,9 +490,12 @@
      <script setup>
 import { ref, onMounted, computed, reactive, watch } from 'vue';
 import axios from 'axios';
-import { useRoute } from 'vue-router';
+import { useRoute, onBeforeRouteUpdate } from 'vue-router';
 import { useCheckoutStore } from '../stores/payment';
 const checkoutStore = useCheckoutStore();
+const selectedLocation = computed(() => checkoutStore.selectedLocation);
+const selectedShippingMethod = computed(() => checkoutStore.selectedShippingMethod);
+const paymentMethods = computed(() => checkoutStore.paymentMethods);
 // 使用 ref 來管理響應式數據
 const products = ref([]); // 儲存後端返回的商品資料
 const route = useRoute();
@@ -505,26 +513,6 @@ const fetchCartItems = async () => {
 // 在組件加載時調用 fetchCartItems
 onMounted(() => {
   fetchCartItems();
-});
-
-// 接收從上一頁傳遞的數據
-const location = ref(route.query.location || 'TW'); // 默認為台灣
-const shippingMethod = ref(route.query.shipping || '');
-const paymentMethod = ref(route.query.payment || '');
-
-// 根據選擇的數據動態生成表單選項
-const formOptions = computed(() => {
-  const forms = {
-    TW: {
-      shipping: ['貨到付款', '超商取貨', '宅配到府'],
-      payment: ['信用卡 (Visa / MasterCard)', '現金付款'],
-    },
-    default: {
-      shipping: ['EMS國際快遞', '國際郵件'],
-      payment: ['信用卡 (Visa / MasterCard)'],
-    },
-  };
-  return forms[location.value] || forms.default;
 });
 
 // 顧客資料
@@ -574,10 +562,8 @@ const syncCustomerToRecipient = () => {
     }
     recipientData.name = customerData.name;
     recipientData.phone = customerData.phone;
-    // 注意：這裡使用 customerData 的國碼
-    // customerData.countryCode = recipientData.countryCode;
     recipientData.country = location.value; // 使用 location 的值
-    // recipientData.city = customerData.city; // Ensure the city field also syncs
+   
 
     // 如果是同一个地区，直接同步地址
     address.value = address.value; // 或者可以保留原有地址
@@ -587,8 +573,6 @@ const syncCustomerToRecipient = () => {
   } else {
     recipientData.name = "";
     recipientData.phone = "";
-    // recipientData.country = route.query.country;
-    // recipientData.city = '';
     recipientData.countryCode = ""; // 保留原本的預設選項
 
     // 重置地址相关信息
@@ -668,6 +652,20 @@ defineProps({
 // 假設 saveAddress 和 defaultAddress 是需要的變數
 const saveAddress = ref('');
 const defaultAddress = ref('');
+
+onBeforeRouteUpdate((to, from) => {
+  if (to.query && to.query.location) {
+    checkoutStore.setSelectedLocation(to.query.location)
+  }
+})
+
+// console.log('Debit component loaded');
+
+// const props = defineProps({
+//   location: String,
+//   shipping: String,
+//   payment: String
+// });
 </script>
 
      

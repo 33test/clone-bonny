@@ -107,7 +107,7 @@
       id="delivery-location"
       class="sideBorder options message"
       v-model="selectedLocation"
-      @change="onLocationChange"
+      @change="updateLocation($event.target.value)"
     >                            
       <option value="AU">澳大利亞</option>
       <option value="BE">比利時</option>
@@ -144,6 +144,7 @@
       id="shipping-method"
       class="sideBorder options message"
       v-model="selectedShippingMethod"
+      @change="updateShippingMethod($event.target.value)"
     >                                             
     <option
         v-for="(method, index) in shippingMethods"
@@ -213,13 +214,13 @@
   <RouterLink
   :to="{
     name: 'Debit',
-    path: '/views/Debit',
     query: {
       location: selectedLocation,
       shipping: selectedShippingMethod,
       payment: selectedPaymentMethod,
     },
   }"
+   
   class="flex justify-center buttonBg"
 >
   前往結帳
@@ -247,68 +248,39 @@ import { ref, computed, watch} from 'vue';
 import { useRoute, onBeforeRouteUpdate, useRouter} from 'vue-router';
 import { useCheckoutStore } from '../stores/payment';
 const checkoutStore = useCheckoutStore();
+const selectedLocation = computed(() => checkoutStore.selectedLocation);
+const selectedShippingMethod = computed(() => checkoutStore.selectedShippingMethod);
+const paymentMethods = computed(() => checkoutStore.paymentMethods);
+const deliveryOptions = computed(() => checkoutStore.deliveryOptions);
+const shippingMethods = computed(() => deliveryOptions.value);
+const updateLocation = (newLocation) => {
+  checkoutStore.setSelectedLocation(newLocation); // 更新到 store
+  onLocationChange(); // 確保觸發相關更新邏輯
+};
+// 新增一個方法來更新 shipping method
+const updateShippingMethod = (method) => {
+  checkoutStore.setSelectedShippingMethod(method);
+};
+
 // Initialize selected shipping method if needed
 checkoutStore.setSelectedShippingMethod('貨到付款-黑貓宅配/滿499免運'); // Example, adjust based on your logic
 
 const route = useRoute();
 const router = useRouter();
 const location = (route.query.location || 'TW'); // 初始化时同步
-// 管理送貨地點與送貨方式的對應關係
-const deliveryOptions = {
-  AU: ['海外運送(3-7天到貨，EMS寄送)'],
-  BE: ['海外運送(3-7天到貨，EMS寄送)'],
-  CA: ['海外運送(3-7天到貨，EMS寄送)'],
-  CN: ['亞洲區-海外運送 (3-7天到貨，順豐)', '亞洲區-海外運送 (21-35天到貨，普通國際郵寄)'],
-  FR: ['海外運送(3-7天到貨，EMS寄送)'],
-  DE: ['海外運送(3-7天到貨，EMS寄送)'],
-  HK: ['亞洲區-海外運送 (3-7天到貨，順豐)', '亞洲區-海外運送 (21-35天到貨，普通國際郵寄)'],
-  ID: ['亞洲區-海外運送 (3-7天到貨，順豐)', '亞洲區-海外運送 (21-35天到貨，普通國際郵寄)'],
-  IT: ['海外運送(3-7天到貨，EMS寄送)'],
-  JP: ['亞洲區-海外運送 (3-7天到貨，順豐)', '亞洲區-海外運送 (21-35天到貨，普通國際郵寄)'],
-  KR: ['亞洲區-海外運送 (3-7天到貨，順豐)', '亞洲區-海外運送 (21-35天到貨，普通國際郵寄)'],
-  MO: ['亞洲區-海外運送 (3-7天到貨，順豐)', '亞洲區-海外運送 (21-35天到貨，普通國際郵寄)'],
-  MY: ['亞洲區-海外運送 (3-7天到貨，順豐)', '亞洲區-海外運送 (21-35天到貨，普通國際郵寄)'],
-  NL: ['海外運送(3-7天到貨，EMS寄送)'],
-  NZ: ['海外運送(3-7天到貨，EMS寄送)'],
-  PW: ['海外運送(3-7天到貨，EMS寄送)'],
-  PE: ['海外運送(3-7天到貨，EMS寄送)'],
-  PH: ['海外運送(3-7天到貨，EMS寄送)'],
-  SG: ['亞洲區-海外運送 (3-7天到貨，順豐)', '亞洲區-海外運送 (21-35天到貨，普通國際郵寄)'],
-  TW: ['貨到付款-黑貓宅配/滿499免運','貨到付款-郵局宅配','全台門市取貨付款','黑貓宅配','郵局宅配'],
-  TH: ['亞洲區-海外運送 (3-7天到貨，順豐)', '亞洲區-海外運送 (21-35天到貨，普通國際郵寄)'],
-  GB: ['海外運送(3-7天到貨，EMS寄送)'],
-  US: ['海外運送(3-7天到貨，EMS寄送)'],
-  VN: ['亞洲區-海外運送 (3-7天到貨，順豐)', '亞洲區-海外運送 (21-35天到貨，普通國際郵寄)'],
-  default: ['貨到付款-黑貓宅配/滿499免運','貨到付款-郵局宅配','全台門市取貨付款','黑貓宅配','郵局宅配'],
-};
-// 管理送貨地點與付款方式的對應關係
 const paymentOptions = {
   TW: ['信用卡 (Visa / MasterCard / JCB / 銀聯卡)', '現金付款'],
   default: ['信用卡 (Visa / MasterCard / JCB / 銀聯卡)'],
 };
-const paymentMethods = computed(() =>{
-const cashOnlyMethods = [
-    '貨到付款-黑貓宅配/滿499免運',
-    '貨到付款-郵局宅配',
-    '全台門市取貨付款',
-  ];
-  
-  if (cashOnlyMethods.includes(selectedShippingMethod.value)) {
-    return ['現金付款'];
-  }
-  return selectedLocation.value === 'TW'
-    ? paymentOptions.TW
-    : paymentOptions.default;
-});
-// 用於管理選中的送貨地點和送貨方式
-const selectedLocation = ref('TW'); // 預設選擇台灣
-const selectedShippingMethod = ref('');
-const shippingMethods = computed(() => deliveryOptions[selectedLocation.value] || deliveryOptions.default);
 const selectedPaymentMethod = ref('');
 // 當送貨地點改變時，更新送貨方式與付款方式
 const onLocationChange = () => {
-  selectedShippingMethod.value = shippingMethods.value[0] || '';
-  selectedPaymentMethod.value = paymentMethods.value[0] || '';
+  // 使用 store 的 action 來設置 shipping method
+  checkoutStore.setSelectedShippingMethod(shippingMethods.value[0] || '');
+  
+  // 使用 store 的 action 來設置 payment method
+  checkoutStore.setSelectedPaymentMethod(paymentMethods.value[0] || '');
+  
   console.log(`送貨地點變更為: ${selectedLocation.value}`);
 };
 // 監控 selectedShippingMethod 的變化動態更新 selectedPaymentMethod
@@ -318,13 +290,6 @@ watch(selectedShippingMethod, () => {
 
 // 初始化選項
 onLocationChange();
-
-// 路由更新時監控變化
-onBeforeRouteUpdate((to) => {
-  if (to.query && to.query.location) {
-    location.value = to.query.location;
-  }
-});
 
 // 防護 route.query 為 undefined 的情況
 if (route.query && route.query.location) {
@@ -336,6 +301,30 @@ watch(selectedPaymentMethod, (newPaymentMethod) => {
     query: { ...route.query, payment: newPaymentMethod },
   });
 });
+
+// 監聽路由查詢參數的變化
+watch(() => route.query, (newQuery) => {
+  if (newQuery.location) {
+    checkoutStore.setSelectedLocation(newQuery.location)
+  }
+}, { immediate: true })
+
+// const handleRouteDebug = () => {
+//   console.log('Attempting to navigate to Debit');
+//   console.log('Debit route params:', {
+//     location: selectedLocation,
+//     shipping: selectedShippingMethod,
+//     payment: selectedPaymentMethod
+//   });
+//   router.push({
+//     name: 'Debit',
+//     query: {
+//       location: selectedLocation,
+//       shipping: selectedShippingMethod,
+//       payment: selectedPaymentMethod
+//     }
+//   });
+// }
 
 </script>
 

@@ -96,6 +96,13 @@ export const useCheckoutStore = defineStore('payment', {
     setSelectedPaymentMethod(paymentMethod) {
         this.selectedPaymentMethod = paymentMethod;
       },
+    // 新增這個 action
+    initializeShippingMethod() {
+    // 如果還沒選擇送貨方式，則設置為預設值
+    if (!this.selectedShippingMethod && this.deliveryOptions.length > 0) {
+      this.selectedShippingMethod = this.deliveryOptions[0];
+    }
+  }  
   },
 });
 
