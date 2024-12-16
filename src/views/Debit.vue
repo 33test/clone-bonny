@@ -535,7 +535,7 @@ const customerData = reactive({
 const recipientData = reactive({
   name: "",
   phone: "",
-  country: location.value, // 初始化為傳入的地點
+  country: checkoutStore.selectedLocation, // 初始化為傳入的地點
   city:'',
 });
 
@@ -606,6 +606,11 @@ watch(
     paymentMethod.value = newPayment || '';
   }
 );
+
+// 添加监听，确保 country 正确更新
+watch(() => checkoutStore.selectedLocation, (newLocation) => {
+  recipientData.country = newLocation;
+});
 
 const countryList = [
   { code: "+886", countryEn: "Taiwan", countryZh: "台灣" },
