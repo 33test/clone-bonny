@@ -1,6 +1,8 @@
 <script setup>
 import MemberNavbar from "../components/MemberNavbar.vue"
 import LogOut from "@/components/Logout.vue";
+import { ref, computed, onMounted } from "vue";
+
 </script>
 
 <template>

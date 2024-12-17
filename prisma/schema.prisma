@@ -1,0 +1,160 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model cart {
+  user_id    String @db.VarChar(50)
+  product_id String @db.VarChar(50)
+  quantity   Int?
+
+  @@ignore
+}
+
+model categories {
+  categories_id      Int                  @id @default(autoincrement())
+  category_name      String               @unique(map: "category_name_UNIQUE") @db.VarChar(50)
+  category_type      String               @default("regular") @db.VarChar(50)
+  parent_id          Int?
+  product_categories product_categories[]
+}
+
+model deliver {
+  id              Int     @id
+  phone           String? @db.VarChar(20)
+  recepient       String  @db.VarChar(50)
+  recepient_phone String  @db.VarChar(20)
+  country         String  @db.VarChar(100)
+  city            String  @db.VarChar(100)
+  region          String  @db.VarChar(100)
+  address         String  @db.Text
+  owner           Int
+  users           users   @relation(fields: [owner], references: [userId], onDelete: NoAction, onUpdate: NoAction, map: "fk_deliver_owner_userId")
+
+  @@index([owner], map: "fk_owner_userId_idx")
+}
+
+model orders_imformation {
+  orders_id            BigInt                           @id @db.UnsignedBigInt
+  orders_email         String?                          @db.VarChar(255)
+  orders_created_date  DateTime                         @db.DateTime(0)
+  orders_status        orders_imformation_orders_status
+  orders_finished_date DateTime?                        @db.DateTime(0)
+}
+
+model product_categories {
+  product_categories_id Int        @id @default(autoincrement())
+  product_id            Int
+  category_id           Int
+  categories            categories @relation(fields: [category_id], references: [categories_id], onDelete: Cascade, map: "fk_product_categories_category_id")
+  products              products   @relation(fields: [product_id], references: [product_id], onDelete: Cascade, map: "fk_product_categories_product_id")
+
+  @@unique([product_id, category_id], map: "index_product_id_category_id")
+  @@index([category_id], map: "fk_product_categories_category_id_idx")
+  @@index([product_id], map: "fk_product_categories_product_id_idx")
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model product_images {
+  product_images_id Int      @id @default(autoincrement())
+  product_id        Int
+  image_path        String   @db.VarChar(255)
+  order_sort        Int      @default(1)
+  alt_text          String?  @db.VarChar(255)
+  image_type        String   @db.VarChar(20)
+  products          products @relation(fields: [product_id], references: [product_id], onDelete: NoAction, onUpdate: NoAction, map: "fk_product_images_product_id")
+
+  @@index([product_id], map: "fk_product_images_product_id_idx")
+  @@index([order_sort, image_type], map: "idx_type_sort")
+}
+
+model product_specs {
+  product_specs_id Int      @id @default(autoincrement())
+  product_id       Int
+  spec_value       String   @db.VarChar(50)
+  stock            Int      @default(0) @db.UnsignedInt
+  color_text       String?  @db.VarChar(50)
+  color_square     String?  @db.VarChar(50)
+  products         products @relation(fields: [product_id], references: [product_id], onDelete: NoAction, onUpdate: NoAction, map: "fk_product_spec_product_id")
+
+  @@index([product_id], map: "fk_product_spec_product_id_idx")
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model products {
+  product_id         Int                  @id @default(autoincrement())
+  product_name       String               @db.VarChar(100)
+  original_price     Decimal?             @db.Decimal(10, 2)
+  sale_price         Decimal              @db.Decimal(10, 2)
+  product_sku        String               @unique(map: "sku_UNIQUE") @db.VarChar(50)
+  total_sales        Int                  @default(0)
+  status             Int                  @default(1) @db.TinyInt
+  listed_at          DateTime             @default(now()) @db.Timestamp(0)
+  description        String?              @db.Text
+  created_at         DateTime             @default(now()) @db.Timestamp(0)
+  product_categories product_categories[]
+  product_images     product_images[]
+  product_specs      product_specs[]
+  wishlists          wishlists[]
+
+  @@index([status], map: "idx_status")
+}
+
+model profile {
+  id            Int       @id @unique(map: "id_UNIQUE") @default(autoincrement())
+  userId        String    @unique(map: "userId_UNIQUE") @db.VarChar(50)
+  username      String    @db.VarChar(50)
+  email         String?   @unique(map: "email_UNIQUE") @db.VarChar(255)
+  phone         String?   @unique(map: "phone_UNIQUE") @db.VarChar(20)
+  gender        String    @db.VarChar(1)
+  birthday      DateTime? @db.Date
+  mobile_phone  String?   @db.VarChar(20)
+  from_store    String?   @db.VarChar(45)
+  introduced_by String?   @db.VarChar(50)
+  password_hash String?   @db.VarChar(255)
+  line_id       String?   @db.VarChar(100)
+  google_id     String?   @db.VarChar(100)
+
+  @@index([userId], map: "user_id")
+}
+
+model users {
+  id            Int         @id @unique(map: "id_UNIQUE") @default(autoincrement())
+  userId        Int?        @unique(map: "userId_UNIQUE")
+  username      String      @db.VarChar(50)
+  email         String?     @unique(map: "email_UNIQUE") @db.VarChar(255)
+  phone         String?     @unique(map: "phone_UNIQUE") @db.VarChar(20)
+  gender        String      @db.VarChar(1)
+  birthday      DateTime?   @db.Date
+  mobile_phone  String?     @db.VarChar(20)
+  from_store    String?     @db.VarChar(45)
+  introduced_by String?     @db.VarChar(50)
+  password_hash String?     @db.VarChar(255)
+  line_id       String?     @db.VarChar(100)
+  deliver       deliver[]
+  wishlists     wishlists[]
+
+  @@index([userId], map: "user_id")
+}
+
+model wishlists {
+  id                    Int      @id @default(autoincrement())
+  wishlists_members_id  Int
+  wishlists_products_id Int
+  products              products @relation(fields: [wishlists_products_id], references: [product_id], onDelete: Cascade, map: "fk_wishlists_products")
+  users                 users    @relation(fields: [wishlists_members_id], references: [userId], onDelete: NoAction, onUpdate: NoAction, map: "fk_wishlists_users")
+
+  @@index([wishlists_members_id], map: "fk_wishlists_members_idx")
+  @@index([wishlists_products_id], map: "fk_wishlists_products")
+}
+
+enum orders_imformation_orders_status {
+  Pending
+  Completed
+  Cancelled
+}

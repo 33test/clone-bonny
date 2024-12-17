@@ -1,13 +1,13 @@
-import { createRouter, createWebHistory } from 'vue-router'
-import HomeView from '../views/HomeView.vue'
-import ProductList from '@/views/ProductList.vue'
-import StoreInfo from '../components/StoreInfo.vue'
-import Cart from '../views/Cart.vue'
-import UsersEdit from "@/views/UsersEdit.vue"
-import SharedCartList from '@/views/SharedCartList.vue'
+import { createRouter, createWebHistory } from "vue-router";
+import HomeView from "../views/HomeView.vue";
+import ProductList from "@/views/ProductList.vue";
+import StoreInfo from "../components/StoreInfo.vue";
+import Cart from "../views/Cart.vue";
+import UsersEdit from "@/views/UsersEdit.vue";
+import SharedCartList from "@/views/SharedCartList.vue";
 
 const router = createRouter({
-	history: createWebHistory(import.meta.env.BASE_URL),
+  history: createWebHistory(import.meta.env.BASE_URL),
 
 	//
 	routes: [
@@ -171,7 +171,5 @@ const router = createRouter({
 			}
 		},
 	],
-
 })
-
-export default router
+export default router;
