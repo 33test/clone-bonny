@@ -1,7 +1,7 @@
 <script setup>
+import { ElMessage } from "element-plus"
 import { defineProps } from "vue"
 import { RouterLink } from "vue-router"
-import { ElMessage } from "element-plus"
 import { storeToRefs } from "pinia"
 import { useCartStore } from "@/stores/cart"
 const CartStore = useCartStore()
@@ -47,7 +47,7 @@ const handleAddToCart = async () => {
         <p class="text-base font-black">NT${{ props.price }}</p>
         <p class="mb-1 text-base text-gray-500 line-through decoration-slate-400">NT${{ props.originalPrice }}</p>
         <button
-          @click="handleAddToCart"
+          @click.prevent="handleAddToCart"
           class="cartButton absolute bottom-4 left-4 right-4 h-8 rounded bg-neutral-100 border-l-neutral-300 lg:bg-white lg:h-10 lg:left-8 lg:right-8 lg:-top-50px lg:hidden"
         >
           <i class="fa-solid fa-cart-shopping lg:hidden"></i>
