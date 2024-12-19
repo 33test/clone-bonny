@@ -14,24 +14,23 @@
 </template>
 
 <script setup>
-import { onMounted, ref } from 'vue'
-import axios from 'axios'
-import { useRouter, useRoute } from 'vue-router'
-const router = useRouter()  
+import { onMounted, ref } from "vue"
+import axios from "axios"
+import { useRouter, useRoute } from "vue-router"
+const router = useRouter()
 const route = useRoute()
-const redirectUrl = ref('')  // 用 ref 來存儲重定向 URL
-
+const redirectUrl = ref("") // 用 ref 來存儲重定向 URL
 
 // CLIENT_ID
 const CLIENT_ID = "201131820318-om98jaudikrjuraavdmt8o0jlitaf7b1.apps.googleusercontent.com"
 // 後端 API 網址
-const API_URL = 'http://localhost:3300'
+const API_URL = import.meta.env.VITE_API_URL
 // localSrotage 的 key
-const STORAGE_KEY = 'UID'
-const STORAGE_JWT_KEY = 'TwT'
+const STORAGE_KEY = "UID"
+const STORAGE_JWT_KEY = "TwT"
 // data
 const userData = ref(null)
-const isLoggedIn = ref(false)  // 登入狀態
+const isLoggedIn = ref(false) // 登入狀態
 // methods
 function loginProcess(response) {
   userData.value = response.data.user
@@ -40,10 +39,10 @@ function loginProcess(response) {
   localStorage.setItem(STORAGE_JWT_KEY, response.data.token) // JWT 放在 localStorage
 
   // 設置 axios 預設標頭
-  axios.defaults.headers.common['Authorization'] = `Bearer ${response.data.token}`;
+  axios.defaults.headers.common["Authorization"] = `Bearer ${response.data.token}`
 
-// 處理重定向
-const redirectPath = route.query.redirect || '/'
+  // 處理重定向
+  const redirectPath = route.query.redirect || "/"
   router.push(redirectPath)
 }
 
@@ -53,48 +52,47 @@ const handleRegister = async (googleData) => {
     const response = await axios.post(`${API_URL}/auth/register`, googleData)
 
     loginProcess(response)
-
   } catch (error) {
-    console.error('註冊失敗 QAQ:', error);
+    console.error("註冊失敗 QAQ:", error)
     Swal.fire({
-      title: '註冊失敗',
+      title: "註冊失敗",
       text: error.message,
-      confirmButtonText: '確認',
-      confirmButtonColor: '#000000', // 註冊按鈕設為黑色背景
+      confirmButtonText: "確認",
+      confirmButtonColor: "#000000", // 註冊按鈕設為黑色背景
       customClass: {
-        confirmButton: 'swal2-confirm-custom' // 自定義class
-      }
+        confirmButton: "swal2-confirm-custom", // 自定義class
+      },
     })
   }
 }
-
 
 // Google 登入 callback fn
 const onLogin = (res) => {
   // 確保後端允許跨域請求
   const axiosOptions = {
     headers: {
-      "Access-Control-Allow-Origin": window.location.origin
-    }
+      "Access-Control-Allow-Origin": window.location.origin,
+    },
   }
 
-  axios.post(`${API_URL}/auth/verify-token`, res, axiosOptions)
+  axios
+    .post(`${API_URL}/auth/verify-token`, res, axiosOptions)
     .then((res) => {
       if (res.data.exists) {
         // 用戶存在（可能是一般註冊或 Google 註冊），直接登入
         loginProcess(res)
       } else {
-        // 用戶不存在，詢問是否要註冊，目前先用 sweetalert        
+        // 用戶不存在，詢問是否要註冊，目前先用 sweetalert
         Swal.fire({
-          title: '註冊確認',
+          title: "註冊確認",
           text: `此 email 尚未註冊，是否要註冊新帳號？ \n ${res.data.googleData.email}`,
           showCancelButton: true,
-          confirmButtonText: '註冊',
-          cancelButtonText: '取消',
-          confirmButtonColor: '#000000', // 註冊按鈕設為黑色背景
+          confirmButtonText: "註冊",
+          cancelButtonText: "取消",
+          confirmButtonColor: "#000000", // 註冊按鈕設為黑色背景
           customClass: {
-            confirmButton: 'swal2-confirm-custom' // 自定義class
-          }
+            confirmButton: "swal2-confirm-custom", // 自定義class
+          },
         }).then((result) => {
           if (result.isConfirmed) {
             handleRegister(res.data.googleData)
@@ -105,13 +103,13 @@ const onLogin = (res) => {
     .catch((error) => {
       console.error("登入失敗", error)
       Swal.fire({
-        title: '登入失敗',
-        text: '登入失敗，請稍後再試或連繫客服人員',
-        confirmButtonText: '確認',
-        confirmButtonColor: '#000000', // 註冊按鈕設為黑色背景
+        title: "登入失敗",
+        text: "登入失敗，請稍後再試或連繫客服人員",
+        confirmButtonText: "確認",
+        confirmButtonColor: "#000000", // 註冊按鈕設為黑色背景
         customClass: {
-          confirmButton: 'swal2-confirm-custom' // 自定義class
-        }
+          confirmButton: "swal2-confirm-custom", // 自定義class
+        },
       })
     })
 }
@@ -122,10 +120,10 @@ const handleLogout = () => {
   isLoggedIn.value = false
   localStorage.removeItem(STORAGE_KEY) // 移除 localStorage
   localStorage.removeItem(STORAGE_JWT_KEY) // 移除 localStorage
-  delete axios.defaults.headers.common['Authorization']; // 移除預設標頭
+  delete axios.defaults.headers.common["Authorization"] // 移除預設標頭
 
-    // 重定向到登入頁
-    router.push('/users/sign-in')
+  // 重定向到登入頁
+  router.push("/users/sign-in")
 
   // 等待 DOM 更新後再重新渲染按鈕
   setTimeout(() => {
@@ -153,31 +151,25 @@ const initializeGoogle = () => {
   })
 
   // 獲取容器寬度
-  const container = document.querySelector('.google-btn-wrapper');
-  const containerWidth = container?.offsetWidth || 800;
+  const container = document.querySelector(".google-btn-wrapper")
+  const containerWidth = container?.offsetWidth || 800
 
   // 設定按鈕寬度（確保不小於最小值）
   const buttonWidth = containerWidth - 40
 
-
   // 渲染 Google 登入按鈕~~~ 可以選樣式啦
-  window.google.accounts.id.renderButton(
-    document.getElementById("googleButton"),
-    {
-      theme: "outline",  // outline 或 filled_blue
-      size: "large",     // large 或 medium
-      shape: "pill", // rectangular 或 pill
-      text: "signin_with", // signin_with 或 continue_with
-      logo_alignment: "center",
-      width: buttonWidth
-    }
-  )
-
+  window.google.accounts.id.renderButton(document.getElementById("googleButton"), {
+    theme: "outline", // outline 或 filled_blue
+    size: "large", // large 或 medium
+    shape: "pill", // rectangular 或 pill
+    text: "signin_with", // signin_with 或 continue_with
+    logo_alignment: "center",
+    width: buttonWidth,
+  })
 }
 
 onMounted(() => {
-  redirectUrl.value = route.query.redirect || '/'
-
+  redirectUrl.value = route.query.redirect || "/"
 
   // 檢查登入狀態
   const isUserLoggedIn = localStorage.getItem(STORAGE_KEY)
@@ -186,10 +178,10 @@ onMounted(() => {
     // 或是導向登入頁面重新登入
     isLoggedIn.value = true
   }
-  const token = localStorage.getItem(STORAGE_JWT_KEY);
+  const token = localStorage.getItem(STORAGE_JWT_KEY)
   if (token) {
     // 預設帶上標頭
-    axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+    axios.defaults.headers.common["Authorization"] = `Bearer ${token}`
   }
 
   if (window.google) {
@@ -200,12 +192,12 @@ onMounted(() => {
 })
 
 // 添加 resize 事件監聽
-window.addEventListener('resize', () => {
+window.addEventListener("resize", () => {
   // 使用 debounce 避免過於頻繁的重新渲染
   setTimeout(() => {
-    initializeGoogle();
-  }, 250);
-});
+    initializeGoogle()
+  }, 250)
+})
 </script>
 
 <style scoped>
@@ -215,8 +207,6 @@ window.addEventListener('resize', () => {
   align-items: center;
   width: 100%;
 }
-
-
 
 .swal2-confirm-custom {
   color: #ffffff !important;
