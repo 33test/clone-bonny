@@ -5,7 +5,9 @@ import NavBar from "./components/NavBar.vue"
 import Footer from "./components/Footer.vue"
 const route = useRoute()
 
-const shouldShowFooter = computed(() => !route.path.startsWith("/Cart"))
+const shouldShowFooter = computed(() => {
+  return !route.path.startsWith("/Cart") && !route.path.startsWith("/Debit")
+})
 </script>
 
 <template>

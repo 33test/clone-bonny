@@ -18,7 +18,7 @@
     "jwt-decode": "^4.0.0",
     "pinia": "^2.2.6",
     "swiper": "^11.1.15",
-    "vue": "^3.5.12",
+    "vue": "^3.4.15",
     "vue-awesome-paginate": "^1.2.0",
     "vue-router": "^4.4.5",
     "vue3-danmaku": "^1.6.1",
